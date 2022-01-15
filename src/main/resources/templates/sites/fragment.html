@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymelead.org/thymeleaf-extras-springsecurity5"
+>
+
+<head th:fragment="html_head(type)" th:remove="${type}">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--link jquery cdn-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!--link boostrap cdn-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- link google-font-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bakbak+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,600;1,200&display=swap" rel="stylesheet">
+
+    <!-- link fontawesome-->
+    <link rel="stylesheet" th:href="@{/fontawesome-free-5.15.4-web/css/all.css}"/>
+    <!--link my css-->
+    <link rel="stylesheet" th:href="@{/sites/css/site.css}">
+
+    <!--my link script-->
+    <script th:src="@{/sites/js/site.js}"></script>
+
+    <!--link light slider-->
+    <link rel="stylesheet" th:href="@{/sites/css/lightslider.css}">
+    <script th:src="@{/sites/js/Jquery.js}" type="text/javascript"></script>
+    <script th:src="@{/sites/js/lightslider.js}" type="text/javascript"></script>
+    <!--link icon-->
+    <link rel="icon" th:href="@{/icon/1088704.png}" type="image/icon type">
+
+</head>
+
+<body>
+    <div>
+        <div class="loader" th:fragment="loader">
+            <div class="center">
+                <span class="text-loading"><b>loading</b></span>
+                <div class="ring"></div>
+            </div>
+        </div>
+
+        <div class="sroll-top-btn" th:fragment="srollTopButton">
+            <a href="javascript:;"><i class="fa fa-chevron-up" aria-hidden="true"></i></a>
+        </div>
+        
+        <div class="header" th:fragment="header">
+            <div class="shape">
+                <div class="retangle">breaking news</div>
+                <div class="triangle-right"></div>
+            </div>
+
+            <div class="text-slider">
+                <div class="text-container">
+                    <th:block th:each="item : ${statuses}">
+                        <div class="text-slide">
+                            <a th:href="@{'/status/'+${item.statusId}}" th:text="${item.description}"></a>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+
+            <div class="login-icon-bar" sec:authorize="isAuthenticated()">
+
+                <img alt="" class="login-btn" th:src="@{${#request.userPrincipal.principal.user.avartarPath}}">
+
+                <a href="javascript:;" class="link-fb">
+                    <i class="fab fa-facebook-square"></i>
+                </a>
+                <a href="javascript:;" class="link-google">
+                    <i class="fab fa-google-plus-square"></i>
+                </a>
+            </div>
+
+            <div class="login-icon-bar" sec:authorize="!isAuthenticated()">
+                <a th:href="@{/login}" class="link-login">
+                    <i class="far fa-user-circle"></i>
+                </a>
+                <a href="" class="link-fb">
+                    <i class="fab fa-facebook-square"></i>
+                </a>
+                <a href="" class="link-google">
+                    <i class="fab fa-google-plus-square"></i>
+                </a>
+            </div>
+
+            <div class="login-model" sec:authorize="isAuthenticated()">
+                <ul>
+                    <li>
+                        <i class="fas fa-user-cog"></i>
+                        <a href="javascript:;" class="btn-profile" >Profile</a>
+                    </li>
+                    <li>
+                        <i aria-hidden="true" class="fa fa-key"></i>
+                        <a th:href="@{/forgot-password}">Change password</a>
+                    </li>
+                    <li>
+                        <i aria-hidden="true" class="fa fa-sign-out-alt"></i>
+                        <a href="javascript: logoutForm.submit()">Sign Out</a>
+                        <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
+                        </form>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="model-profile" sec:authorize="isAuthenticated()">
+                <div class="profile-container">
+                    <div class="back-ground-profile bg-info">
+                        <div>
+                            <button class="close-profile"><i class="far fa-times-circle fa-2x"></i></button>
+                        </div>
+                        <div class="avatar-profile text-center">
+                            <img alt="" height="150px" th:src="@{${#request.userPrincipal.principal.user.avartarPath}}" width="150px">
+                            <b class="fullname" th:inline="text">[[${#request.userPrincipal.principal.fullName}]]</b>
+                        </div>
+                    </div>
+                    <div class="profile-info bg-light">
+                        <ul>
+                            <li>
+                                <h5>
+                                    <i class="fas fa-house-user"></i>
+                                    Privilege
+                                </h5>
+                                <span sec:authentication="principal.authorities">Roles</span>
+                            </li>
+                            <li>
+                                <h5>
+                                    <i class="fas fa-user"></i>
+                                    UserName
+                                </h5>
+                                <span th:inline="text">[[${#request.userPrincipal.principal.username}]]</span>
+                            </li>
+                            <li>
+                                <h5>
+                                    <i class="fas fa-envelope"></i>
+                                    Email
+                                </h5>
+                                <span th:inline="text">[[${#request.userPrincipal.principal.email}]]</span>
+                            </li>
+                            <li>
+                                <h5>
+                                    <i class="fas fa-question-circle"></i>
+                                    Help & Feedback
+                                </h5>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="banner" th:fragment="banner">
+            <div class="logo-container">
+                <div class="logo">
+                    <div class="text-logo">
+
+                    </div>
+                    <ul class="logo-option">
+                        <li><span>Báo Ông Thắng</span></li>
+                        <li><span>Chúc bạn đọc báo vui vẻ</span></li>
+                        <li><span>Hãy ủng hộ Báo Ông Thắng </span></li>
+                        <li><span>Hãy Like Share Comment</span></li>
+                    </ul>
+                </div>
+            </div>
+            <img th:src="@{/sites/images/banner_head.png}" alt="">
+
+        </div>
+
+        <div class="navigation" th:fragment="navigation">
+            <ul class="menu-container">
+                <li class="my-nav-item-1">
+                    <a class="" th:href="@{/}">
+                        <i class="fa fa-home" aria-hidden="true"></i>
+                        Trang chủ
+                    </a>
+                </li>
+                <li class="my-nav-item-2">
+                    <a class="" th:href="@{/category/13}">
+                        Dịch Covid-19
+                    </a>
+                </li>
+
+                <li class="my-nav-item-3">
+                    <a class="" th:href="@{/status/2}">
+                        Mới nhất
+                    </a>
+                </li>
+
+                <li class="my-nav-item-4">
+                    <a class="" th:href="@{/category/8}">
+                        Giải Trí
+                    </a>
+                </li>
+
+                <li class="my-nav-item-5">
+                    <a class="" th:href="@{/category/11}">
+                        Pháp luật & đời sống
+                    </a>
+                </li>
+
+                <li class="my-nav-item more-category">
+                    <a href="javascript:;">Nhiều hơn <i class="fa fa-caret-down" aria-hidden="true"></i></a>
+                </li>
+            </ul>
+
+            <div class="search d-flex">
+                <form th:action="@{'/search-bar'}" method="get" id="user-search">
+                    <input type="text" autocomplete="off" name="search-bar" required placeholder="Type your keywords here" value="">
+                    <ul class="autocomplete-box">
+
+                    </ul>
+                </form>
+                <button class="search-btn"><i class="fas fa-search"></i></button>
+            </div>
+
+            <div class="model p-3">
+                <div class="row">
+                    <div class="col-3" th:each="item : ${categories}">
+                        <a th:href="@{'/category/' + ${item.categoryId}}">
+                            <h5 th:text="${item.categoryName}" />
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="footer" th:fragment="footer">
+            <div class="site-footer">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <h6>About</h6>
+                            <p class="text-justify">BaoOngThang.com <i>READ WANT TO BE SIMPLE </i> Lorem ipsum dolor sit
+                                amet consectetur adipisicing elit. Deserunt, aspernatur. Totam beatae quidem eaque atque
+                                recusandae, blanditiis officiis distinctio omnis voluptate, enim tenetur tempore quisquam
+                                cum accusantium qui quasi reprehenderit?</p>
+                        </div>
+    
+                        <div class="col-xs-6 col-md-3">
+                            <h6>Status</h6>
+                            <ul class="footer-links" th:each="item :${status}">
+                                <li><a th:href="@{'/status/' + ${item.statusId}}" th:text="${item.statusName}"></a></li>
+                            </ul>
+                        </div>
+    
+                        <div class="col-xs-6 col-md-3">
+                            <h6>technologies</h6>
+                            <ul class="footer-links">
+                                <li><a href="#">Html</a></li>
+                                <li><a href="#">Ccs</a></li>
+                                <li><a href="#">Bootstrap</a></li>
+                                <li><a href="#">Thymeleaf</a></li>
+                                <li><a href="#">JavaScipt</a></li>
+                                <li><a href="#">JavaSpringBoot</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <p class="copyright-text">Copyright &copy; 2022 All Rights Reserved by
+                                <a href="https://www.facebook.com/thangit.com.vn/">Đinh Thành Thắng</a>.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

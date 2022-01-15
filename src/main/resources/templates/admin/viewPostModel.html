@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>View Detail Post</title>
+    <!-- Bootstrap CSS -->
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/admin/richtexteditor/rte_theme_default.css}" />
+    <script th:src="@{/admin/richtexteditor/rte.js}"></script>
+    <script th:src='@{/admin/richtexteditor/plugins/all_plugins.js}'></script>
+</head>
+<body>
+    <div class="row">
+        <div class="col-8 offset-2">
+            <textarea id="viewpostdetail" th:utext="${content}">
+            </textarea>
+        </div>
+    </div>
+</body>
+<script>
+    var editor = new RichTextEditor("#viewpostdetail")
+</script>
+</html>

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sign Up</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <link rel="icon" th:href="@{/icon/1088704.png}" type="image/icon type">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/common/css/signup.css}">
+
+
+</head>
+<body>
+    <div class="signup-form">
+        <div class="signup-container slideDown">
+            <div class="sign-up-title">
+                <h3 class="text-center">SIGN UP NOW</h3>
+                <p><i>Hãy đến với Báo Ông Thắng để cập nhật được nhiều tin nhật gân, dramma hơn mỗi ngày....</i></p>
+            </div>
+            <div>
+                <form th:action="@{/signup}" method="post" th:object="${user}">
+                    <div class="form-group">
+                        <label> <b> Username </b> </label>
+                        <input type="text" class="form-control" th:field="*{username}" required placeholder="Username">
+                        <span th:if="${usernameErr != null}" class="text-danger">[[${usernameErr}]]</span>
+                    </div>
+                    <div class="form-group">
+                        <label> <b> Fullname </b> </label>
+                        <input type="text" class="form-control" th:field="*{fullname}" placeholder="Fullname">
+                    </div>
+
+                    <div class="form-group">
+                        <label> <b> Email Address </b> </label>
+                        <input type="email" class="form-control" th:field="*{email}" required placeholder="Email Address">
+                        <span th:if="${emailErr != null}" class="text-danger">[[${emailErr}]]</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label> <b> Password </b> </label>
+                        <input type="password" class="form-control" th:field="*{password}" id="password" required placeholder="Password">
+                    </div>
+
+                    <div class="form-group">
+                        <label> <b> Confirm Password </b> </label>
+                        <input type="password" class="form-control" reqruired onchange="checkPasswordMath(this)" placeholder="Confirm Password">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-outline-light" value="Sign up">
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript">
+    function checkPasswordMath(fieldConfirmPassword){
+        if(fieldConfirmPassword.value != $("#password").val()){
+            fieldConfirmPassword.setCustomValidity("Password do not match!")
+        }else{
+            fieldConfirmPassword.setCustomValidity("")
+        }
+    }
+</script>
+</html>

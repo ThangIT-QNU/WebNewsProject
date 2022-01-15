@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Manage Comment</title>
+    <div th:replace="admin/fragment :: html_head(type='tag')"/>
+</head>
+
+
+<body>
+<div th:replace="admin/fragment :: loader"/>
+<div class="container-fluids">
+    <div th:replace="admin/fragment :: navigation"/>
+    <div class="main">
+        <div th:replace="admin/fragment :: sidebar_menu"/>
+        <div class="content">
+            <div class="main-content">
+                <div class="admin-manage-user-title d-flex text-light justify-content-between">
+                    <div class="d-flex">
+                        <h3 class="mr-3 text-secondary"><b>Manage Comment</b></h3>
+                    </div>
+                    <div>
+                        <form th:action="@{'/admin/manage-comment/page/1'}" method="get">
+                            <div class="form-group d-flex">
+                                <input aria-describedby="helpId" class="form-control" name="keyword" th:value="${keyword}" placeholder="Type your keywords" type="text">
+                                <button class="btn btn-outline-secondary ml-2" type="submit" >
+                                    <i aria-hidden="true" class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="admin-table-manage">
+                    <table class="table table-hover">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">
+                                <a class="text-light">ID</a>
+                            </th>
+                            <th scope="col">
+                               UserName
+                            </th>
+                            <th scope="col">
+                                Post ID
+                            </th>
+                            <th scope="col">
+                                Content
+                            </th>
+                            <th scope="col">
+                                Comment Date
+                            </th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <th:block th:each="item : ${comments}">
+                            <tr>
+                                <th scope="row" th:text="${item.commentId}"></th>
+
+                                <td th:text="${item.user.fullname}" ></td>
+                                <td th:text="${item.news.newsId}" > </td>
+                                <td th:text="${item.content}"width="300px"></td>
+                                <td th:text="${#calendars.format(item.commentDate, 'HH:mm dd-MM-yyyy')}"></td>
+                                <td class="action-btn">
+                                    <a th:href="@{'/admin/manage-comment/delete/'+${item.commentId}}" class="btn btn-outline-danger">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </th:block>
+
+                        </tbody>
+                    </table>
+                    <nav class="d-flex flex-column align-items-center">
+                        <div th:inline="text">
+                            Total Comment: [[${totalElement}]] - Page: [[${currentPage}]] of [[${totalPage}]]
+                        </div>
+                        <ul class="pagination">
+                            <li th:class="page-item + ${currentPage <=1 ? ' disabled': ''}">
+                                <a class="page-link " th:href="@{/admin/manage-comment}">First</a>
+                            </li>
+                            <li th:class="page-item + ${currentPage <=1 ? ' disabled': ''}">
+                                <a class="page-link" th:href="@{'/admin/manage-comment/page/'+${currentPage - 1} + ${keyword != null ? '?keyword='+keyword : '?keyword='}}">&lt;</a>
+                            </li>
+
+                            <th:block th:if="${totalPage <= 5}">
+                                <th:block th:each="i : ${#numbers.sequence(1,totalPage)}">
+                                    <li th:class="page-item + ${currentPage == i? ' active' : ''}">
+                                        <a th:class="page-link" th:href="@{'/admin/manage-comment/page/'+ ${i} + ${keyword != null ? '?keyword='+keyword : '?keyword='}}">[[${i}]]</a>
+                                    </li>
+                                </th:block>
+                            </th:block>
+
+                            <th:block th:if="${totalPage > 5}">
+                                <th:block th:if="${currentPage <3 ||  currentPage >= totalPage -2}">
+                                    <th:block th:each="i : ${#numbers.sequence(1,3)}">
+                                        <li th:class="page-item + ${currentPage == i? ' active' : ''}">
+                                            <a th:class="page-link" th:href="@{'/admin/manage-comment/page/'+ ${i} + ${keyword != null ? '?keyword='+keyword : '?keyword='}}">[[${i}]]</a>
+                                        </li>
+                                    </th:block>
+
+                                    <th:block>
+                                        <li th:class="page-item + ${currentPage == 3? ' active' : ''}">
+                                            <a th:class="page-link" th:href="@{'/admin/manage-comment/page/3'+ ${keyword != null ? '?keyword='+keyword : '?keyword='}}">...</a>
+                                        </li>
+                                    </th:block>
+
+                                    <th:block th:each="i : ${#numbers.sequence(totalPage -2,totalPage)}">
+                                        <li th:class="page-item + ${currentPage == i? ' active' : ''}">
+                                            <a th:class="page-link" th:href="@{'/admin/manage-comment/page/'+ ${i}+ ${keyword != null ? '?keyword='+keyword : '?keyword='}}">[[${i}]]</a>
+                                        </li>
+                                    </th:block>
+                                </th:block>
+
+                                <th:block th:if="${currentPage >= 3 && currentPage <= totalPage -3}">
+
+                                    <th:block>
+                                        <li th:class="page-item">
+                                            <a th:class="page-link" th:href="@{'/admin/manage-comment/page/'+ ${currentPage -1}+ ${keyword != null ? '?keyword='+keyword : '?keyword='}}">...</a>
+                                        </li>
+                                    </th:block>
+
+                                    <th:block th:each="i : ${#numbers.sequence(currentPage -2, currentPage +2)}">
+                                        <li th:class="page-item + ${currentPage == i? ' active' : ''}">
+                                            <a th:class="page-link" th:href="@{'/admin/manage-comment/page/'+ ${i} + ${keyword != null ? '?keyword='+keyword : '?keyword='}}">[[${i}]]</a>
+                                        </li>
+                                    </th:block>
+
+                                    <th:block>
+                                        <li th:class="page-item">
+                                            <a th:class="page-link" th:href="@{'/admin/manage-comment/page/'+ ${currentPage +1} + ${keyword != null ? '?keyword='+keyword : '?keyword='}}">...</a>
+                                        </li>
+                                    </th:block>
+
+                                </th:block>
+
+                            </th:block>
+
+
+                            <li th:class="page-item + ${currentPage >= totalPage ? ' disabled': ''}">
+                                <a class="page-link" th:href="@{'/admin/manage-comment/page/'+ ${currentPage+1} + ${keyword != null ? '?keyword='+keyword : '?keyword='}}">&gt;</a>
+                            </li>
+
+                            <li th:class="page-item + ${currentPage >= totalPage ? ' disabled': ''}">
+                                <a class="page-link" th:href="@{'/admin/manage-comment/page/'+ ${totalPage} + ${keyword != null ? '?keyword='+keyword : '?keyword='}}">Last&nbsp;
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- site footer content -->
+            <div th:replace="admin/fragment ::footer"></div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+
+</script>
+</html>

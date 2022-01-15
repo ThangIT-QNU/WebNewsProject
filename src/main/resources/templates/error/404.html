@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+    <title>404</title>
+    <style>
+        html, body{
+            height: 100%;
+        }
+        .center{
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="text-center center">
+        <div>
+            <h1>The page you requested does not exist</h1>
+            <button class="back btn btn-info"> Back </button>
+        </div>
+    </div>
+</body>
+<script>
+    document.querySelector(".back").addEventListener("click", function (){
+        window.history.back()
+        // window.location="/webnews"
+    })
+</script>
+</html>

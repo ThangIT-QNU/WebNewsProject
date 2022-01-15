@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Add Role</title>
+    <div th:replace="admin/fragment :: html_head(type='tag')"/>
+
+</head>
+
+
+<body>
+<div th:replace="admin/fragment :: loader"/>
+<div class="container-fluids">
+    <div th:replace="admin/fragment :: navigation"/>
+    <div class="main">
+        <div th:replace="admin/fragment :: sidebar_menu"/>
+        <div class="content">
+            <div class="main-content">
+                <div class="admin-manage-user-title d-flex text-light justify-content-between">
+                    <div class="d-flex">
+
+                        <h4 class="mr-3 text-secondary">
+                            <i class="fas fa-file-alt"></i>
+                            <b>Create New Role</b>
+                        </h4>
+
+                    </div>
+                </div>
+                <div class="admin-add-form">
+                    <form th:action="@{/admin/add-role}" method="post" th:object="${role}" enctype="multipart/form-data">
+                        <div class="card" style="background-color: #c2cdd1;">
+                            <div class="card-body" >
+                                <div class="row">
+                                    <div class="col-6 offset-3">
+                                        <input type="hidden" th:field="*{roleId}" th:value="${role.roleId}">
+                                        <div class="form-group">
+                                            <label>Role Name</label>
+                                            <input type="text" class="form-control" th:field="*{roleName}" th:value="${role.roleName}" required placeholder="Role Name (ROLE_NAME)">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Role Description</label>
+                                            <input type="text" class="form-control" th:field="*{description}" th:value="${role.description}" required placeholder="Description">
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer d-flex flex-row-reverse">
+                                <a th:href="@{/admin/manage-role}" class="btn btn-outline-info mr-2">Exit</a>
+                                <input type="submit" class="btn btn-outline-warning mr-2" value="Update">
+                                <input type="submit" class="btn btn-outline-success mr-2" value="Add">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- site footer content -->
+            <div th:replace="admin/fragment :: footer"/>
+        </div>
+    </div>
+</div>
+</body>
+</html>

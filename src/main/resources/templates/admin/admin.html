@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>DashBoard</title>
+    <div th:replace="admin/fragment :: html_head(type='tag')"/>
+
+</head>
+
+
+<body>
+    <div th:replace="admin/fragment :: loader"/>
+    <div class="container-fluids">
+        <div th:replace="admin/fragment :: navigation"/>
+        <div class="main">
+            <div th:replace="admin/fragment :: sidebar_menu"></div>
+            <div class="content">
+                <div class="main-content">
+                    <div class="dashboard-container">
+                        <div class="text-secondary">
+                            <h4>
+                                <i class="fas fa-tachometer-alt    "></i>
+                                <b>Dashboard</b>
+                            </h4>
+                        </div>
+                        <ul id="autoWidth" class="cs-hidden">
+                            <li class="item-a">
+                                <div class="dashboard-box gradient-a">
+                                    <div class="box-icon">
+                                        <i class="fa fa-user-circle" aria-hidden="true"></i>
+                                    </div>
+                                    <div>
+                                        <h3>Manage user</h3>
+                                        <h1 th:text="${numberOfUser}"></h1>
+                                        <h6>
+                                            <a th:href="@{/admin/manage-user}">
+                                                View Details
+                                                <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                                            </a>
+                                        </h6>
+                                    </div>
+
+                                </div>
+                            </li>
+                            <li class="item-b">
+                                <div class="dashboard-box gradient-b">
+                                    <div class="box-icon">
+                                        <i class="fas fa-newspaper icon"></i>
+                                    </div>
+                                    <div>
+                                        <h3>Manage post</h3>
+                                        <h1 th:text="${numberOfPost}"></h1>
+                                        <h6>
+                                            <a th:href="@{/admin/manage-post}">
+                                                View Details
+                                                <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                                            </a>
+                                        </h6>
+                                    </div>
+
+                                </div>
+                            </li>
+                            <li class="item-c">
+                                <div class="dashboard-box gradient-c">
+                                    <div class="box-icon">
+                                        <i class="fa fa-th-list icon" aria-hidden="true"></i>
+                                    </div>
+                                    <div>
+                                        <h3>Manage Category</h3>
+                                        <h1 th:text="${numberOfCategory}"></h1>
+                                        <h6>
+                                            <a th:href="@{admin/manage-category}">
+                                                View Details
+                                                <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                                            </a>
+                                        </h6>
+                                    </div>
+
+                                </div>
+                            </li>
+                            <li class="item-d">
+                                <div class="dashboard-box gradient-d">
+                                    <div class="box-icon">
+                                        <i class="fas fa-user-shield icon"></i>
+                                    </div>
+                                    <div>
+                                        <h3>Manage Roles</h3>
+                                        <h1 th:text="${numberOfStatus}"></h1>
+                                        <h6>
+                                            <a th:href="@{/admin/manage-role}">
+                                                View Details
+                                                <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                                            </a>
+                                        </h6>
+                                    </div>
+
+                                </div>
+                            </li>
+                            <li class="item-e">
+                                <div class="dashboard-box gradient-e">
+                                    <div class="box-icon">
+                                        <i class="fa fa-comments icon" aria-hidden="true"></i>
+                                    </div>
+                                    <div>
+                                        <h3>Manage Comments</h3>
+                                        <h1 th:text="${numberOfComment}"></h1>
+                                        <h6>
+                                            <a th:href="@{/admin/manage-comment}">
+                                                View Details
+                                                <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                                            </a>
+                                        </h6>
+                                    </div>
+
+                                </div>
+                            </li>
+                            <li class="item-f">
+                                <div class="dashboard-box gradient-f">
+                                    <div class="box-icon">
+                                        <i class="fas fa-scroll    "></i>
+                                    </div>
+                                    <div>
+                                        <h3>Manage Status</h3>
+                                        <h1 th:text="${numberOfStatus}"></h1>
+                                        <h6>
+                                            <a th:href="@{/admin/manage-status}">
+                                                View Details
+                                                <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                                            </a>
+                                        </h6>
+                                    </div>
+
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="top-favorite-post mt-3">
+                        <div class="text-secondary">
+                            <h4>
+                                <i class="fas fa-chart-bar    "></i>
+                                <b>Top 10 Favorite Post</b>
+                            </h4>
+                        </div>
+                        <table class="table">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Post Title</th>
+                                <th scope="col">Liked Count</th>
+                                <th scope="col">Latest Date</th>
+                                <th scope="col">Oldest Date</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <th:block th:each="item : ${topPostList}">
+                                    <tr>
+                                        <th scope="row" th:text="${item.newsId}"></th>
+                                        <td th:text="${#strings.substring(item.title,0,30)}+....."></td>
+                                        <td th:text="${item.likeNumber}"></td>
+                                        <td th:text="${#dates.format(item.latestDate,'dd-MM-yyy')}"></td>
+                                        <td th:text="${#dates.format(item.oldestDateDate,'dd-MM-yyy')}"></td>
+                                    </tr>
+                                </th:block>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+                <div th:replace="admin/fragment :: footer"/>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

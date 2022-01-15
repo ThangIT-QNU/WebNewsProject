@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Manage User</title>
+    <div th:replace="admin/fragment :: html_head(type='tag')"/>
+
+</head>
+
+
+<body>
+<div th:replace="admin/fragment :: loader"/>
+<div class="container-fluids">
+    <div th:replace="admin/fragment :: navigation"/>
+    <div class="main">
+        <div th:replace="admin/fragment :: sidebar_menu"/>
+        <div class="content">
+            <div class="main-content">
+                <div class="admin-manage-user-title d-flex text-light justify-content-between">
+                    <div class="d-flex">
+                        <h3 class="mr-3"><b>Manage User</b></h3>
+                        <span><a th:href="@{/admin/add-user}"><i class="fa fa-plus-circle fa-2x " aria-hidden="true"></i></a></span>
+                    </div>
+                    <div>
+                        <form th:action="@{'/admin/manage-user/page/1'}" method="get">
+                            <div class="form-group d-flex">
+                                <input type="hidden" name="sortDir" th:value="${currentDir}">
+                                <input type="hidden" name="sortField" th:value="${currentField}">
+                                <input type="text" name="keyword" class="form-control" placeholder="Type your keywords" th:value="${keyword}">
+                                <button class="btn btn-outline-secondary ml-2"><i class="fa fa-search" aria-hidden="true"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="admin-table-manage">
+                    <table class="table table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">
+                                    <a class="text-light" th:href="@{'/admin/manage-user/page/'+${currentPage} + '?sortDir=' +${reverseDir} +'&sortField=userId'+${keyword != null ? '&keyword='+keyword : '&keyword='}}">ID</a>
+                                </th>
+                                <th scope="col">Avartar</th>
+                                <th scope="col">
+                                    <a class="text-light" th:href="@{'/admin/manage-user/page/'+${currentPage} + '?sortDir=' +${reverseDir} +'&sortField=username'+${keyword != null ? '&keyword='+keyword : '&keyword='}}">UserName</a>
+                                </th>
+                                <th scope="col">
+                                    <a class="text-light" th:href="@{'/admin/manage-user/page/'+${currentPage} + '?sortDir=' +${reverseDir} +'&sortField=fullname'+${keyword != null ? '&keyword='+keyword : '&keyword='}}">FullName</a>
+                                </th>
+                                <th scope="col">
+                                    <a class="text-light" th:href="@{'/admin/manage-user/page/'+${currentPage} + '?sortDir=' +${reverseDir} +'&sortField=email'+${keyword != null ? '&keyword='+keyword : '&keyword='}}">Email</a>
+                                </th>
+                                <th scope="col">
+                                    Roles
+                                </th>
+                                <th scope="col">
+                                    <a class="text-light" th:href="@{'/admin/manage-user/page/'+${currentPage} + '?sortDir=' +${reverseDir} +'&sortField=enable'+${keyword != null ? '&keyword='+keyword : '&keyword='}}">Enable</a>
+                                </th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="item : ${users}">
+                                <th scope="row" th:text="${item.userId}"></th>
+                                <td>
+                                    <img th:src="@{${item.avartarPath}}" alt="" width="50px" height="50px" class="rounded">
+                                </td>
+                                <td th:text="${item.username}"></td>
+                                <td th:text="${item.fullname}"></td>
+                                <td th:text="${item.email}"></td>
+                                <td>
+                                    <th:block th:each="role : ${item.roles}">
+                                        <span>[[${#strings.substring(role.roleName,5)}+',']]</span>
+                                    </th:block>
+                                </td>
+                                <td th:text="${item.isEnable() ? 'True' : 'False'}"></td>
+                                <td>
+                                    <a th:href="@{'/admin/manage-user/edit/'+${item.userId}}" class="btn btn-outline-warning">
+                                        <i class="fas fa-edit fa-1x"></i>
+                                    </a>
+                                    <a th:href="@{'/admin/manage-user/delete/'+${item.userId}}" class="btn btn-outline-danger">
+                                        <i class="fa fa-recycle" aria-hidden="true"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <nav class="d-flex flex-column align-items-center">
+                    <div th:inline="text">
+                        Total Users: [[${totalElement}]] - Page: [[${currentPage}]] of [[${totalPage}]]
+                    </div>
+                    <ul class="pagination">
+                        <li th:class="page-item + ${currentPage <=1 ? ' disabled': ''}">
+                            <a class="page-link " th:href="@{/admin/manage-user}">First</a>
+                        </li>
+                        <li th:class="page-item + ${currentPage <=1 ? ' disabled': ''}">
+                            <a class="page-link" th:href="@{'/admin/manage-user/page/'+${currentPage - 1} + '?sortDir=' +${currentDir} +'&sortField='+${currentField}+ ${keyword != null ? '&keyword='+keyword : '&keyword='}}">&lt;</a>
+                        </li>
+
+                        <th:block th:if="${totalPage <= 5}">
+                            <th:block th:each="i : ${#numbers.sequence(1,totalPage)}">
+                                <li th:class="page-item + ${currentPage == i? ' active' : ''}">
+                                    <a th:class="page-link" th:href="@{'/admin/manage-user/page/'+ ${i} + '?sortDir=' +${currentDir} +'&sortField='+${currentField}+ ${keyword != null ? '&keyword='+keyword : '&keyword='}}">[[${i}]]</a>
+                                </li>
+                            </th:block>
+                        </th:block>
+
+                        <th:block th:if="${totalPage > 5}">
+                            <th:block th:if="${currentPage <3 ||  currentPage >= totalPage -2}">
+                                <th:block th:each="i : ${#numbers.sequence(1,3)}">
+                                    <li th:class="page-item + ${currentPage == i? ' active' : ''}">
+                                        <a th:class="page-link" th:href="@{'/admin/manage-user/page/'+ ${i} + '?sortDir=' +${currentDir} +'&sortField='+${currentField}+ ${keyword != null ? '&keyword='+keyword : '&keyword='}}">[[${i}]]</a>
+                                    </li>
+                                </th:block>
+
+                                <th:block>
+                                    <li th:class="page-item + ${currentPage == 3? ' active' : ''}">
+                                        <a th:class="page-link" th:href="@{'/admin/manage-user/page/3'+ '?sortDir=' +${currentDir} +'&sortField='+${currentField}+ ${keyword != null ? '&keyword='+keyword : '&keyword='}}">...</a>
+                                    </li>
+                                </th:block>
+
+                                <th:block th:each="i : ${#numbers.sequence(totalPage -2,totalPage)}">
+                                    <li th:class="page-item + ${currentPage == i? ' active' : ''}">
+                                        <a th:class="page-link" th:href="@{'/admin/manage-user/page/'+ ${i}+ '?sortDir=' +${currentDir} +'&sortField='+${currentField}+ ${keyword != null ? '&keyword='+keyword : '&keyword='}}">[[${i}]]</a>
+                                    </li>
+                                </th:block>
+                            </th:block>
+
+                            <th:block th:if="${currentPage >= 3 && currentPage <= totalPage -3}">
+
+                                <th:block>
+                                    <li th:class="page-item">
+                                        <a th:class="page-link" th:href="@{'/admin/manage-user/page/'+ ${currentPage -1}+ '?sortDir=' +${currentDir} +'&sortField='+${currentField}+ ${keyword != null ? '&keyword='+keyword : '&keyword='}}">...</a>
+                                    </li>
+                                </th:block>
+
+                                <th:block th:each="i : ${#numbers.sequence(currentPage -2, currentPage +2)}">
+                                    <li th:class="page-item + ${currentPage == i? ' active' : ''}">
+                                        <a th:class="page-link" th:href="@{'/admin/manage-user/page/'+ ${i} + '?sortDir=' +${currentDir} +'&sortField='+${currentField}+ ${keyword != null ? '&keyword='+keyword : '&keyword='}}">[[${i}]]</a>
+                                    </li>
+                                </th:block>
+
+                                <th:block>
+                                    <li th:class="page-item">
+                                        <a th:class="page-link" th:href="@{'/admin/manage-user/page/'+ ${currentPage +1} + '?sortDir=' +${currentDir} +'&sortField='+${currentField}+ ${keyword != null ? '&keyword='+keyword : '&keyword='}}">...</a>
+                                    </li>
+                                </th:block>
+
+                            </th:block>
+
+                        </th:block>
+
+
+                        <li th:class="page-item + ${currentPage >= totalPage ? ' disabled': ''}">
+                            <a class="page-link" th:href="@{'/admin/manage-user/page/'+ ${currentPage+1} + '?sortDir=' +${currentDir} +'&sortField='+${currentField}+ ${keyword != null ? '&keyword='+keyword : '&keyword='}}">&gt;</a>
+                        </li>
+
+                        <li th:class="page-item + ${currentPage >= totalPage ? ' disabled': ''}">
+                            <a class="page-link" th:href="@{'/admin/manage-user/page/'+ ${totalPage} + '?sortDir=' +${currentDir} +'&sortField='+${currentField}+ ${keyword != null ? '&keyword='+keyword : '&keyword='}}">Last&nbsp;
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <!-- site footer content -->
+            <div th:replace="admin/fragment :: footer"/>
+        </div>
+    </div>
+</div>
+</body>
+</html>

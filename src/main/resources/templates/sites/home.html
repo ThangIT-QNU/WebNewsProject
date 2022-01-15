@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="sites/fragment :: html_head(type='tag')" />
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+    <div>
+        <div th:replace="sites/fragment :: loader"/>
+        <div th:replace="sites/fragment :: srollTopButton" />
+        <div th:replace="sites/fragment :: header" />
+        <div th:replace="sites/fragment :: banner" />
+        <div th:replace="sites/fragment :: navigation" />
+        <div class="content">
+            <div class="slider">
+                <div class="slides">
+                    <th:block th:each="item : ${hotNews}">
+                        <div class="slide">
+                            <img th:src="@{${item.imgPath}}" alt="">
+                            <div class="slide-post-content">
+                                <h1  th:text="${#strings.substring(item.title,0,100)+'...'}"></h1>
+                                </h1>
+                                <hr>
+                                <span class="ml-3" th:inline="text">
+                                    <i class="fas fa-user icon"></i>
+                                    [[${item.author}]]
+                                </span>
+
+                                <span class="ml-3" th:inline="text">
+                                    <i class="fa fa-calendar icon" aria-hidden="true"></i>
+                                    [[${#dates.format(item.dateUpload,'dd-MM-yyyy')}]]
+                                </span>
+
+                                <span class="ml-3">
+                                    <i class="fab fa-readme icon"></i>
+                                    <a th:href="@{'/post/'+${item.newsId}}" class="text-light">Read more</a>
+                                </span>
+                                <hr>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+
+            <div class="recent-new">
+                <div class="recent-post">
+                    <div class="portion-bar">
+                        <div class="part"></div>
+                        <div class="bar">
+                            Tin Mới nhất
+                        </div>
+                    </div>
+                    <th:block th:each="item : ${recentlyPosts}">
+                        <div class="post">
+                            <div class="img-post">
+                                <img th:src="@{${item.imgPath}}" alt="">
+                            </div>
+                            <div class="post-time">
+                                <span th:text="${#dates.format(item.dateUpload, 'dd-MMM')}"></span>
+                            </div>
+                            <div class="content-post">
+                                <h4 th:text="${item.category.categoryName}"></h4>
+                                <p th:text="${#strings.substring(item.title,0,100)}+'....'"></p>
+                                <span th:inline="text">
+                                    <i class="fas fa-user icon"></i>
+                                    [[${item.author}]]
+                                </span>
+                                <p>
+                                    <a th:href="@{'/post/'+${item.newsId}}">Readmore&gt;&gt; </a>
+                                </p>
+                            </div>
+                        </div>
+                    </th:block>
+
+                </div>
+                <div class="contact-bar">
+                    <div class="short-bar"> follow us</div>
+
+                    <div class="icon-socials">
+                        <ul>
+                            <li> <img th:src="@{/sites/images/button_fb.png}" alt=""></li>
+                            <li> <img th:src="@{/sites/images/button_tw.png}" alt=""></li>
+                            <li> <img th:src="@{/sites/images/button_link.png}" alt=""></li>
+                            <li> <img th:src="@{/sites/images/button_yt.png}" alt=""></li>
+                            <li> <img th:src="@{/sites/images/button_pi.png}" alt=""></li>
+                            <li> <img th:src="@{/sites/images/button_rss.png}" alt=""></li>
+                        </ul>
+                    </div>
+
+                    <div class="img-ads">
+                        <img th:src="@{/sites/images/banner_1.png}" alt="">
+                    </div>
+                </div>
+            </div>
+
+            <div class="attention-event">
+                <div class="portion-bar">
+                    <div class="part"></div>
+                    <div class="bar">
+                        sự kiện đáng chú ý
+                    </div>
+                </div>
+
+                <div class="main-content">
+                    <div class="view-event">
+                        <div class="event-slider">
+                            <div class="event-slides">
+                                <th:block th:each="item : ${eventNews}">
+                                    <div class="event-slide">
+                                        <img th:src="@{${item.imgPath}}" alt="">
+                                        <div class="event-slide-content">
+                                            <h3  th:text="${#strings.substring(item.title,0,100)+'...'}"></h3>
+                                            <hr>
+                                            <span th:inline="text">
+                                                <i class="fas fa-user icon"></i>
+                                                [[${item.author}]]
+                                            </span>
+
+                                            <span th:inline="text">
+                                                <i class="fa fa-calendar icon" aria-hidden="true"></i>
+                                                [[${#dates.format(item.dateUpload,'dd-MM-yyyy')}]]
+                                            </span>
+
+                                            <span class="ml-3">
+                                                <i class="fab fa-readme icon"></i>
+                                                <a th:href="@{'/post/'+${item.newsId}}" class="text-light">Read more</a>
+                                            </span>
+                                            <hr>
+                                        </div>
+                                    </div>
+                                </th:block>
+
+                            </div>
+
+                            <div class="arrow-btn">
+                                <span class="prev">&#10094;</span>
+                                <span class="next">&#10095;</span>
+                            </div>
+
+                            <div class="navigation-manual">
+                                <th:block th:each="i : ${#numbers.sequence(1,eventNews.size())}">
+                                    <span class="ball"></span>
+                                </th:block>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="side-tab-bar">
+                        <ul class="tabbar">
+                            <li href="#tab1" class="active" >Yêu thích</li>
+                            <li href="#tab2">Tiêu Điểm </li>
+                            <li href="#tab3">Hot</li>
+                        </ul>
+                        <ul class="tabcontent">
+                            <li id="tab1" class="">
+                                <th:block th:each="item : ${favoriteNews}">
+                                    <a th:href="@{'/post/'+ ${item.newsId}}" style="text-decoration: none; color: grey">
+                                        <div class="event-post">
+                                            <div class="event-img-post">
+                                                <img th:src="@{${item.imgPath}}" width="120px" height="120px" alt="">
+                                            </div>
+
+                                            <div class="content-post">
+                                                <span th:text="${#strings.substring(item.title,0,100)}+'...'"></span>
+                                                <div class="d-flex">
+                                            <span class="mr-3" th:inline="text">
+                                                <i class="fas fa-user icon"></i>
+                                                [[${item.author}]]
+                                            </span>
+
+                                                    <span th:inline="text">
+                                                <i class="fa fa-calendar icon" aria-hidden="true"></i>
+                                                [[${#dates.format(item.dateUpload,'dd-MM-yyyy')}]]
+                                            </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </th:block>
+                            </li>
+                            <li id="tab2" class="">
+                                <th:block th:each="item : ${focusNews}">
+                                    <a th:href="@{'/post/'+ ${item.newsId}}" style="text-decoration: none; color: grey">
+                                        <div class="event-post">
+                                            <div class="event-img-post">
+                                                <img th:src="@{${item.imgPath}}" width="120px" height="120px" alt="">
+                                            </div>
+
+                                            <div class="content-post">
+                                                <span th:text="${#strings.substring(item.title,0,100)}+'...'"></span>
+                                                <div class="d-flex">
+                                            <span class="mr-3" th:inline="text">
+                                                <i class="fas fa-user icon"></i>
+                                                [[${item.author}]]
+                                            </span>
+
+                                                    <span th:inline="text">
+                                                <i class="fa fa-calendar icon" aria-hidden="true"></i>
+                                                [[${#dates.format(item.dateUpload,'dd-MM-yyyy')}]]
+                                            </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </th:block>
+
+                            </li>
+                            <li id="tab3" class="">
+                                <th:block th:each="item : ${hotNews}">
+                                    <a th:href="@{'/post/'+ ${item.newsId}}" style="text-decoration: none; color: grey">
+                                        <div class="event-post">
+                                            <div class="event-img-post">
+                                                <img th:src="@{${item.imgPath}}" width="120px" height="120px" alt="">
+                                            </div>
+
+                                            <div class="content-post">
+                                                <span th:text="${#strings.substring(item.title,0,100)}+'...'"></span>
+                                                <div class="d-flex">
+                                            <span class="mr-3" th:inline="text">
+                                                <i class="fas fa-user icon"></i>
+                                                [[${item.author}]]
+                                            </span>
+
+                                                    <span th:inline="text">
+                                                <i class="fa fa-calendar icon" aria-hidden="true"></i>
+                                                [[${#dates.format(item.dateUpload,'dd-MM-yyyy')}]]
+                                            </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </th:block>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="featured-post">
+                <div class="portion-bar">
+                    <div class="part"></div>
+                    <div class="bar">
+                        những bài viết nổi bật
+                    </div>
+                </div>
+
+                <div class="featured-main-content">
+                    <ul id="autoWidth" class="cs-hidden card-container ">
+                        <th:block th:each="item : ${featuredNews}">
+                            <li class="item-a">
+                                <div class=card-item>
+                                    <img th:src="@{${item.imgPath}}" alt="">
+                                    <div class="post-header">
+                                        <h4 th:text="${item.category.categoryName}"></h4>
+                                        <p th:text="${#strings.substring(item.title,0,90)}+'...'"></p>
+                                        <a  class="text-info" th:href="@{'/post/'+${item.newsId}}">ReadMore</a>
+                                        <div class="d-flex">
+                                        <span class="mr-3" th:inline="text">
+                                            <i class="fa fa-calendar icon" aria-hidden="true"></i>
+                                            [[${#dates.format(item.dateUpload,'dd-MM-yyy')}]]
+                                        </span>
+                                            <span>
+                                            <i class="fa fa-comment icon" aria-hidden="true"></i>
+                                            14 Comments
+                                        </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </th:block>
+
+                    </ul>
+                </div>
+            </div>
+
+            <div class="trending">
+                <div class="trending-container">
+                    <div class="trend">
+                        <div class="trend-title">
+                            <h1>City Hight light news</h1>
+                            <div class="d-flex">
+                                <span class="mr-3">
+                                    <i class="fa fa-calendar icon" aria-hidden="true"></i>
+                                    6/12/2000
+                                </span>
+                                <span>
+                                    <i class="fa fa-comment icon" aria-hidden="true"></i>
+                                    14 Comments
+                                </span>
+                            </div>
+                        </div>
+                        <img th:src="@{/sites/images/back1.png}" alt="">
+                    </div>
+
+                    <div class="trend">
+                        <div class="trend-title">
+                            <h1>City Hight light news</h1>
+                            <div class="d-flex">
+                                <span class="mr-3">
+                                    <i class="fa fa-calendar icon" aria-hidden="true"></i>
+                                    6/12/2000
+                                </span>
+                                <span>
+                                    <i class="fa fa-comment icon" aria-hidden="true"></i>
+                                    14 Comments
+                                </span>
+                            </div>
+                        </div>
+                        <img th:src="@{/sites/images/back2.png}" alt="">
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div th:replace="sites/fragment :: footer" />
+    </div>
+</body>
+<script>
+
+    $(".my-nav-item-1").addClass("active")
+
+</script>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Add Category</title>
+    <div th:replace="admin/fragment :: html_head(type='tag')"/>
+
+</head>
+
+
+<body>
+<div th:replace="admin/fragment :: loader"/>
+<div class="container-fluids">
+    <div th:replace="admin/fragment :: navigation"/>
+    <div class="main">
+        <div th:replace="admin/fragment :: sidebar_menu"/>
+        <div class="content">
+            <div class="main-content">
+                <div class="admin-manage-user-title d-flex text-light justify-content-between">
+                    <div class="d-flex">
+
+                        <h4 class="mr-3 text-secondary">
+                            <i class="fas fa-file-alt    "></i>
+                            <b>Create New Category</b>
+                        </h4>
+
+                    </div>
+                </div>
+                <div class="admin-add-form">
+                    <form th:action="@{/admin/add-category}" method="post" th:object="${category}" enctype="multipart/form-data">
+                        <div class="card" style="background-color: #c2cdd1;">
+                            <div class="card-body" >
+                                <div class="row">
+                                    <div class="col-6 offset-3">
+                                        <input type="hidden" th:field="*{categoryId}" th:value="${category.categoryId}">
+                                        <div class="form-group">
+                                            <label>Category Name</label>
+                                            <input type="text" class="form-control" th:field="*{categoryName}" th:value="${category.categoryName}" placeholder="Category Name">
+                                            <!-- <small id="helpId" class="text-muted">Help text</small> -->
+                                        </div>
+<!--                                    </div>-->
+<!--                                    <div class="col-6">-->
+
+                                        <div class="img-style-lg d-flex justify-content-center mt-2">
+                                            <img id="thumnail" alt="Image For post" th:src="@{${category.imgPath}}" width="450px" height="250px">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Choose Image</label>
+                                            <input type="hidden" name="oldImage" th:value="${category.image}">
+                                            <input type="file" name="img" id="fileImage" class="form-control" accept="image/jpeg,image/png">
+                                            <!-- <span class="text-danger" th:inline="text">[[${error}]]</span> -->
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="">Category Description</label>
+                                            <input type="text" id="" class="form-control" th:field="*{description}" th:value="${category.description}" placeholder="Category Name">
+                                            <!-- <small id="helpId" class="text-muted">Help text</small> -->
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer d-flex flex-row-reverse">
+                                <a th:href="@{/admin/manage-category}" class="btn btn-outline-info mr-2">Exit</a>
+                                <input type="submit" class="btn btn-outline-warning mr-2" value="Update">
+                                <input type="submit" class="btn btn-outline-success mr-2" value="Add">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- site footer content -->
+            <div th:replace="admin/fragment :: footer"/>
+        </div>
+    </div>
+</div>
+</body>
+</html>

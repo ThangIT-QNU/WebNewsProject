@@ -1,0 +1,54 @@
+*{
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+
+html,body{
+    height: 100%;
+    background-color: #6d848d;
+    color: whitesmoke;
+    user-select: none;
+}
+
+a{
+    text-decoration: none;
+    color: whitesmoke;
+}
+
+.signup-form{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.signup-container{
+    min-width: 400px;
+    width: 500px;
+    padding: 20px;
+}
+
+.form-group input{
+    background-color: transparent;
+    color: white;
+    outline: white 2px solid;
+}
+
+.form-group .btn-home{
+    outline: white 2px solid;
+}
+
+.slideDown{
+    animation: slideDown 0.9s forwards;
+}
+
+@keyframes slideDown {
+    from{
+        transform: translateY(-500px);
+    }
+    to{
+        transform: translateY(0px);
+    }
+
+}

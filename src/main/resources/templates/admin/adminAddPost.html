@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Add New Post</title>
+    <div th:replace="admin/fragment :: html_head(type='tag')"/>
+    <!--Include the JS & CSS-->
+    <link rel="stylesheet" th:href="@{/admin/richtexteditor/rte_theme_default.css}" />
+    <script th:src="@{/admin/richtexteditor/rte.js}"></script>
+    <script th:src='@{/admin/richtexteditor/plugins/all_plugins.js}'></script>
+    <script th:src="@{/common/js/validateform.js}"></script>
+</head>
+
+<body>
+<div th:replace="admin/fragment :: loader"/>
+    <div class="container-fluids">
+        <div th:replace="admin/fragment :: navigation"/>
+        <div class="main">
+            <div th:replace="admin/fragment :: sidebar_menu"></div>
+            <div class="content">
+                <div class="main-content">
+                    <div class="admin-manage-user-title d-flex text-light justify-content-between">
+                        <div class="d-flex">
+
+                            <h4 class="mr-3 text-secondary">
+                                <i class="fas fa-file-alt    "></i>
+                                <b>Create New Post</b>
+                            </h4>
+                            
+                        </div>
+                    </div>
+                    <div class="admin-add-form">
+                        <form th:action="@{/admin/add-post}" method="post" th:object="${news}" enctype="multipart/form-data" id="addpostform">
+                            <div class="card" style="background-color: #c2cdd1;">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <input type="hidden" th:field="*{newsId}" th:value="${news.newsId}">
+                                            <div class="form-group">
+                                              <label for="">Title</label>
+                                              <input type="text" name="title" id="" class="form-control" placeholder="Title Post" th:field ="*{title}" th:value="${news.title}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="">Author</label>
+                                                <input type="text" name="author" class="form-control" placeholder="Author" th:field="*{author}" th:value="${news.author}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="">Category</label>
+                                                <select class="form-control" name="categoryId">
+                                                    <option value="">Choose category</option>
+                                                    <th:block th:each="item : ${categories}">
+                                                        <option th:value="${item.categoryId}" th:selected="${item.categoryId == news.category.categoryId ? true : false}"> [[${item.categoryName}]]</option>
+                                                    </th:block>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="">Status</label>
+                                                <select class="form-control" name="statusId">
+                                                    <option value="">Choose status</option>
+                                                    <th:block th:each="item : ${status}">
+                                                        <option th:value="${item.statusId}" th:selected="${item.statusId == news.status.statusId ? true : false}"> [[${item.statusName}]]</option>
+                                                    </th:block>
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+
+                                            <div class="img-style-lg d-flex justify-content-center mt-2">
+                                                <img id="thumnail" alt="Image For post" th:src="@{${news.imgPath}}" width="450px" height="250">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="">Choose Image</label>
+                                                <input type="hidden" name="oldImagePost" th:value="${news.mainImage}">
+                                                <input type="file" name="image" id="fileImage" class="form-control" accept="image/jpeg,image/png">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="form-group" >
+                                                <label for="">Content</label>
+                                                <textarea name="content" id="addContentEditor" th:utext="${news.content}">
+
+                                                </textarea>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                <div class="card-footer d-flex flex-row-reverse">
+                                    <a th:href="@{/admin/manage-post}" class="btn btn-outline-info mr-2">Exit</a>
+                                    <input type="submit" class="btn btn-outline-warning mr-2" value="Update">
+                                    <input type="submit" class="btn btn-outline-success mr-2" value="Add">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- site footer content -->
+                <div th:replace="admin/fragment :: footer"/>
+            </div>   
+        </div>
+    </div>
+</body>
+<script>
+    var editor = new RichTextEditor("#addContentEditor")
+
+    $("document").ready(function (){
+        $("#addpostform").validate({
+            rules: {
+                title: {
+                    required: true,
+                    minlength: 100
+
+                },
+                author: {
+                    required: true
+                },
+                categoryId:{
+                    required: true
+                },
+                statusId:{
+                    required: true
+                }
+            },
+            messages: {
+                title: {
+                    required: "Title mustn't be not blank",
+                    minlength: "Title must be at least 100 character"
+                },
+                author: {
+                    required: "Author mustn't be not blank"
+                },
+                categoryId:{
+                    required: "Choose category for post please!!!"
+                },
+                statusId:{
+                    required: "Choose status for post please!!!"
+                }
+            }
+        })
+    })
+</script>
+
+</html>

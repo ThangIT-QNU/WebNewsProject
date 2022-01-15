@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymelead.org/thymeleaf-extras-springsecurity5"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Bài viết</title>
+    <div th:replace="sites/fragment :: html_head(type='tag')"></div>
+    <script th:src="@{/sites/js/postdetail.js}"></script>
+    <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js}"></script>
+</head>
+<body>
+<div>
+    <div th:replace="sites/fragment :: loader"/>
+    <div th:replace="sites/fragment :: srollTopButton"/>
+    <div th:replace="sites/fragment :: header"/>
+    <div th:replace="sites/fragment :: banner"/>
+    <div th:replace="sites/fragment :: navigation"/>
+
+    <div class="postdetail-content">
+        <div class="detail-content">
+
+            <div class="post-title">
+                <h2 th:text="${post.title}"></h2>
+            </div>
+
+            <div class="d-flex">
+                    <span class="mr-3" th:inline="text">
+                        <i class="fas fa-user"></i>
+                        [[${post.author}]]
+                    </span>
+
+                <span th:inline="text">
+                        <i class="fas fa-calendar-alt"></i>
+                        [[${#dates.format(post.dateUpload, 'dd-MMM-yyy')}]]
+                    </span>
+            </div>
+
+            <div class="mt-5" th:utext="${post.content}"/>
+
+            <div class="interact">
+                <!--chức năng like bài viết-->
+                <th:block sec:authorize="!isAuthenticated()">
+                    <span class="like-btn0">
+                        <a th:href="@{/login}">
+                            <i class="fas fa-thumbs-up"></i>
+                            Like
+                        </a>
+                         <span class="like-number" th:text="${likeNumber}">
+                         </span>
+                    </span>
+                </th:block>
+
+                <th:block sec:authorize="isAuthenticated()">
+                    <span th:class="${isLiked ? 'like-btn isLike' : 'like-btn'}">
+                        <i class="fas fa-thumbs-up"></i>
+                        Thích
+                        <span class="like-number" th:text="${likeNumber}">
+                        </span>
+                    </span>
+                </th:block>
+
+                <!--chức năng comment bài viết-->
+                <span class="show-comment">
+                    <i class="fas fa-comment"></i>
+                    Bình luận
+                </span>
+
+                <span class="share-btn">
+                    <div data-href="http://localhost:8080/webnews/" data-layout="button_count">
+                        <a target="_blank"
+                           href=""
+                        >
+                            <i class="fa fa-share-square" aria-hidden="true"></i>
+                            Chia sẻ
+                        </a>
+                    </div>
+                </span>
+            </div>
+            <div class="comment-container">
+                <div class="form-comment">
+                    <div class="d-flex">
+                        <form name="form-cmt" action="" autocomplete="off">
+                            <input name="comment" placeholder="Type Your comment here !!!" type="text">
+                        </form>
+                        <th:block sec:authorize="isAuthenticated()">
+                            <button class="send-cmt" ><i class="fas fa-paper-plane"></i></button>
+                        </th:block>
+                        <th:block sec:authorize="!isAuthenticated()">
+                            <button class="send-cmt0" >
+                                <a th:href="@{/login}">
+                                    <i class="fas fa-paper-plane"></i>
+                                </a>
+                            </button>
+                        </th:block>
+                    </div>
+                </div>
+
+                <div class="recently-comment">
+
+                </div>
+
+                <th:block th:each="comment : ${allComment}">
+                    <div class="comment">
+                        <img alt="" th:src="@{${comment.user.avartarPath}}">
+                        <div class="comment-content">
+                            <h6 th:text="${comment.user.fullname}"></h6>
+                            <span th:text="${comment.content}"> </span>
+                            <br>
+                            <small th:inline="text">[[${comment.commentDate}]]</small>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+        <div class="recomment-sidebar">
+            <div class="short-bar">Đề xuất</div>
+
+            <th:block th:each=" item : ${recomments}">
+                <a th:href="@{'/post/'+${item.getNewsId()}}" style="text-decoration: none">
+                        <div class="event-post mt-3">
+                            <div class="event-img-post">
+                                <img alt="" height="120px" th:src="@{${item.imgPath}}" width="120px">
+                            </div>
+                            <div class="content-post">
+                                <span th:text="${#strings.substring(item.title,0,90)+'...'}"> </span>
+                                <div class="d-flex">
+                                    <span class="mr-3" th:inline="text">
+                                        <i class="fas fa-user icon"></i>
+                                        [[${item.author}]]
+                                    </span>
+                                        <span th:inline="text">
+                                        <i aria-hidden="true" class="fa fa-calendar icon"></i>
+                                        [[${#dates.format(item.dateUpload, 'dd-MM')}]]
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+            </th:block>
+        </div>
+    </div>
+
+    <div th:replace="sites/fragment :: footer"/>
+</div>
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous"
+        src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v12.0"
+        nonce="shVlCOHx">
+</script>
+<script>
+    var dates = document.querySelectorAll(".comment-content small")
+    dates.forEach(date => {
+        date.innerText = moment(date.innerText).fromNow()
+    })
+</script>
+</body>
+
+
+</html>

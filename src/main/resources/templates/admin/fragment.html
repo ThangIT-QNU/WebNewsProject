@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymelead.org/thymeleaf-extras-springsecurity5"
+>
+<head th:fragment="html_head(type)" th:remove="${type}">
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link rel="icon" th:href="@{/icon/1088704.png}" type="image/icon type">
+    <!-- Jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+    <!-- css link -->
+    <link rel="stylesheet" type="text/css" th:href="@{/admin/css/admin.css}">
+
+
+    <!-- link icon -->
+    <link rel="stylesheet" th:href="@{/fontawesome-free-5.15.4-web/css/all.css}">
+    <script src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js" type="module"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+    <!-- link font -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet"> -->
+    <link
+            href="https://fonts.googleapis.com/css2?family=Lobster&family=Roboto+Condensed:ital,wght@0,300;1,700&display=swap"
+            rel="stylesheet">
+
+    <script th:src="@{/admin/js/admin.js}" type="text/javascript"></script>
+    <link rel="stylesheet" th:href="@{/admin/css/lightslider.css}">
+    <script th:src="@{/admin/js/Jquery.js}" type="text/javascript"></script>
+    <script th:src="@{/admin/js/lightslider.js}" type="text/javascript"></script>
+
+
+
+</head>
+<body>
+<div class="loader" th:fragment="loader">
+    <div class="center">
+        <span class="text-loading"><b>loading</b></span>
+        <div class="ring"></div>
+    </div>
+</div>
+<div class="navigation" th:fragment="navigation">
+    <div class="brand d-flex">
+        <img alt="" height="40px" th:src="@{/icon/1088704.png}" width="40px">
+        <div class="brand-text text-center">
+            <a th:href="@{/}">HOME</a>
+        </div>
+    </div>
+
+
+    <div class="search-bar d-flex">
+        <ion-icon class="search-icon" name="search-circle-outline"></ion-icon>
+        <form action="">
+            <input name="keyword" placeholder="Type your Kerword" type="text">
+        </form>
+    </div>
+
+    <div class="menu-iconbar d-flex">
+        <div class="bar-icon">
+            <i aria-hidden="true" class="fa fa-bell"></i>
+        </div>
+
+        <div class="bar-icon">
+            <i aria-hidden="true" class="fa fa-address-card"></i>
+        </div>
+
+        <div class="bar-icon login-manager">
+            <i aria-hidden="true" class="fa fa-user-circle"></i>
+
+        </div>
+
+    </div>
+    <div sec:authorize="isAuthenticated()" class="sub-menu-user">
+        <ul>
+            <li>
+                <i class="fas fa-user-cog"></i>
+                <a href="javascript:;" class="btn-profile" >Profile</a>
+            </li>
+            <li>
+                <i aria-hidden="true" class="fa fa-key"></i>
+                <a th:href="@{/forgot-password}">Change password</a>
+            </li>
+            <li>
+                <i aria-hidden="true" class="fa fa-sign-out-alt"></i>
+                <a href="javascript: logoutForm.submit()">Sign Out</a>
+                <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
+                </form>
+            </li>
+        </ul>
+    </div>
+
+    <div class="model-profile">
+        <div class="profile-container">
+            <div class="back-ground-profile bg-info">
+                <div>
+                    <button class="close-profile"><i class="far fa-times-circle fa-2x"></i></button>
+                </div>
+                <div class="avatar-profile text-center">
+                    <img alt="" height="150px" th:src="@{${#request.userPrincipal.principal.user.avartarPath}}" width="150px">
+                    <b class="fullname" th:inline="text">[[${#request.userPrincipal.principal.fullName}]]</b>
+                </div>
+            </div>
+            <div class="profile-info bg-light">
+                <ul>
+                    <li>
+                        <h5>
+                            <i class="fas fa-house-user"></i>
+                            Privilege
+                        </h5>
+                        <span sec:authentication="principal.authorities">Roles</span>
+                    </li>
+                    <li>
+                        <h5>
+                            <i class="fas fa-user"></i>
+                            UserName
+                        </h5>
+                        <span th:inline="text">[[${#request.userPrincipal.principal.username}]]</span>
+                    </li>
+                    <li>
+                        <h5>
+                            <i class="fas fa-envelope"></i>
+                            Email
+                        </h5>
+                        <span th:inline="text">[[${#request.userPrincipal.principal.email}]]</span>
+                    </li>
+                    <li>
+                        <h5>
+                            <i class="fas fa-question-circle"></i>
+                            Help & Feedback
+                        </h5>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="sidebar-menu" th:fragment="sidebar_menu">
+    <ul>
+        <li class="wallet">
+            <div class="text-center">
+                <h3>Wallet</h3>
+                <img alt="" height="100px" th:src="@{${#request.userPrincipal.principal.user.avartarPath}}" width="100px">
+                <h5 th:inline="text">[[${#request.userPrincipal.principal.fullName}]]</h5>
+            </div>
+        </li>
+        <hr>
+        <li class="side-bar-item">
+            <span>
+                <a href="/webnews/admin">
+                    <i class="fas fa-tachometer-alt icon"></i>
+                    Dashboard
+                </a>
+            </span>
+        </li>
+        <li class="side-bar-item">
+            <span>
+                <a th:href="@{/admin/manage-user}">
+                    <i aria-hidden="true" class="fa fa-user icon"></i>
+                    Manage User
+                </a>
+            </span>
+        </li>
+        <li class="side-bar-item">
+            <span>
+                <a th:href="@{/admin/manage-post}">
+                    <i class="fas fa-newspaper icon"></i>
+                    Manage Post
+                </a>
+            </span>
+        </li>
+
+        <li class="side-bar-item">
+            <span>
+                <a th:href="@{/admin/manage-category}">
+                    <i aria-hidden="true" class="fa fa-th-list icon"></i>
+                    Manage Category
+                </a>
+            </span>
+        </li>
+
+        <li class="side-bar-item">
+            <span>
+                <a th:href="@{/admin/manage-role}">
+                    <i class="fas fa-user-shield icon"></i>
+                    Manage roles
+                </a>
+            </span>
+        </li>
+
+        <li class="side-bar-item">
+            <span>
+                <a th:href="@{/admin/manage-comment}">
+                    <i aria-hidden="true" class="fa fa-comments icon"></i>
+                    Manage Comments
+                </a>
+            </span>
+        </li>
+        <li class="side-bar-item">
+            <span>
+                <a th:href="@{/admin/manage-status}">
+                    <i aria-hidden="true" class="fa fa-bell icon"></i>
+                    Manage Status
+                </a>
+            </span>
+        </li>
+    </ul>
+</div>
+<div class="footer text-center" th:fragment="footer">
+    <p class="copyright-text">Copyright &copy; 2022 All Rights Reserved by
+        <a href="https://www.facebook.com/thangit.com.vn">Đinh Thành Thắng</a>.
+    </p>
+</div>
+</body>
+</html>

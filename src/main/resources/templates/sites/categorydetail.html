@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <div th:replace="sites/fragment :: html_head(type='tag')" />
+    <link rel="stylesheet" th:href="@{/sites/js/site.css}">
+    <title th:text></title>
+</head>
+<body>
+    <div>
+        <div th:replace="sites/fragment :: loader"/>
+        <div th:replace="sites/fragment :: srollTopButton" />
+        <div th:replace="sites/fragment :: header" />
+        <div th:replace="sites/fragment :: banner" />
+        <div th:replace="sites/fragment :: navigation" />
+
+        <div class="content">
+
+            <div class="recent-new">
+                <div class="recent-post">
+                    <div class="portion-bar">
+                        <div class="part"></div>
+                        <div class="bar" th:text="${title}"></div>
+                    </div>
+                    <th:block th:if="${listPosts.size() > 0 || firstPost != null}">
+                        <div class="first-post text-center">
+                            <div>
+                                <img th:src="@{${firstPost.imgPath}}" alt="">
+                                <div class="firstPost-title" th:inline="text">
+                                    <a th:href="@{'/post/'+${firstPost.newsId}}"><h2>[[${firstPost.title}]]</h2></a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <th:block th:each="item : ${listPosts}">
+                            <div class="post">
+                                <div class="img-post">
+                                    <img th:src="@{${item.imgPath}}" alt="">
+                                </div>
+                                <div class="post-time">
+                                    <span th:text="${#dates.format(item.dateUpload, 'dd-MMM')}"></span>
+                                </div>
+                                <div class="content-post">
+                                    <h4 th:text="${item.category.categoryName}"></h4>
+                                    <p th:text="${#strings.substring(item.title,0,70)}+'....'"></p>
+                                    <span th:inline="text">
+                                    <i class="fas fa-user icon"></i>
+                                    [[${item.author}]]
+                                </span>
+                                    <p>
+                                        <a th:href="@{'/post/'+${item.newsId}}">Readmore&gt;&gt; </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </th:block>
+                    </th:block>
+                    <th:block th:if="${listPosts.size() <0}">
+                        <h1 class="text-center mt-5 text-info"> Chưa có bài viết :))</h1>
+                    </th:block>
+
+
+                </div>
+                <div class="contact-bar">
+                    <div class="short-bar"> follow us</div>
+
+                    <div class="icon-socials">
+                        <ul>
+                            <li> <img th:src="@{/sites/images/button_fb.png}" alt=""></li>
+                            <li> <img th:src="@{/sites/images/button_tw.png}" alt=""></li>
+                            <li> <img th:src="@{/sites/images/button_link.png}" alt=""></li>
+                            <li> <img th:src="@{/sites/images/button_yt.png}" alt=""></li>
+                            <li> <img th:src="@{/sites/images/button_pi.png}" alt=""></li>
+                            <li> <img th:src="@{/sites/images/button_rss.png}" alt=""></li>
+                        </ul>
+                    </div>
+
+                    <div class="img-ads">
+                        <img th:src="@{/sites/images/banner_1.png}" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="sites/fragment :: footer" />
+    </div>
+</body>
+<script>
+    // window.onload = function () {
+        var navActive = "." + localStorage.getItem("navActive")
+        $(navActive).addClass("active")
+    // }
+</script>
+</html>

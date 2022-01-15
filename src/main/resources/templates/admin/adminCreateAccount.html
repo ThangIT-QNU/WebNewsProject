@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Create new account</title>
+    <div th:replace="admin/fragment :: html_head(type='tag')"/>
+    <script th:src="@{/common/js/validateform.js}"></script>
+</head>
+
+
+<body>
+<div th:replace="admin/fragment :: loader"/>
+<div class="container-fluids">
+    <div th:replace="admin/fragment :: navigation"/>
+    <div class="main">
+        <div th:replace="admin/fragment :: sidebar_menu"/>
+        <div class="content">
+            <div class="main-content">
+                <div class="admin-manage-user-title d-flex text-light justify-content-between">
+                    <div class="d-flex">
+
+                        <h4 class="mr-3 text-secondary">
+                            <i class="fas fa-file-alt    "></i>
+                            <b>Create New Account</b>
+                        </h4>
+
+                    </div>
+                </div>
+                <div class="admin-add-form">
+                    <form th:action="@{/admin/add-user}" method="post" th:object="${user}" enctype="multipart/form-data" id="adduserform" autocomplete="off">
+                        <div class="card" style="background-color: #c2cdd1;">
+                            <img class="card-img-top" src="holder.js/100x180/" alt="">
+                            <div class="card-body" >
+                                <div class="row">
+                                    <div class="col-6">
+                                        <input type="hidden" th:field="*{userId}" th:value="${user.userId}">
+                                        <div class="form-group">
+                                            <label>UserName</label>
+                                            <input type="text" name="username" class="form-control" th:field="*{username}" th:value="${user.username}" required placeholder="UserName">
+                                            <p class="text-danger" th:if="${userErr}" th:text="${userErr}"></p>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Password</label>
+                                            <input type="hidden" name="oldPassword" th:value="${user.password}">
+                                            <input type="password" name="password" class="form-control" th:value="${user.password}" th:readonly="${user.password}" required placeholder="Password">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>FullName</label>
+                                            <input type="text" name="fullname" class="form-control" th:field="*{fullname}" th:value="${user.fullname}" required placeholder="FullName">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Email</label>
+                                            <input type="email" name="email" class="form-control" th:field="*{email}" th:value="${user.email}" required placeholder="Email">
+                                            <p class="text-danger" th:if="${emailErr}" th:text="${emailErr}"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="img-style-lg d-flex justify-content-center mt-2">
+                                            <img id="thumnail" alt="Image For post" th:src="@{${user.avartarPath}}" width="250px" height="250px">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Choose Image</label>
+                                            <input type="hidden" name="oldAvartar" th:value="${user.avartar}">
+                                            <input type="file" name="image" id="fileImage" class="form-control" accept="image/jpeg,image/png">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer d-flex justify-content-between">
+                                <div>
+                                    <span>Assign Role:</span>
+
+                                    <div class="form-check form-check-inline">
+                                        <th:block th:each="item : ${roles}">
+                                            <input class="form-check-input" type="checkbox" name="roles"
+                                                   th:value="${item.roleId}"
+                                                   th:checked="${roleSet.contains(item)}"
+                                            >
+                                            <label class="form-check-label mr-3" th:text="${#strings.substring(item.roleName,5)}"> </label>
+                                        </th:block>
+                                    </div>
+
+                                </div>
+                                <div class="d-flex">
+                                    <input type="submit" class="btn btn-outline-success mr-2" value="Add">
+                                    <input type="submit" class="btn btn-outline-warning mr-2" value="Update">
+                                    <a th:href="@{/admin/manage-user}" class="btn btn-outline-info mr-2">Exit</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- site footer content -->
+            <div th:replace="admin/fragment :: footer"/>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    $("document").ready(function (){
+        $("#adduserform").validate({
+            rules: {
+                username: {
+                    required: true,
+                    minlength: 3
+                },
+                passwords: {
+                    required: true,
+                    minlength: 4
+                },
+                fullname: {
+                    required: true,
+                },
+                email: {
+                    required: true,
+                    email: true,
+                }
+            },
+            messages: {
+                username: {
+                    required: "UserName mustn't be blank, please.",
+                    minlength: "UserName must be at least 3 character !!!"
+                },
+                passwords: {
+                    required: "Password mustn't be blank, please.",
+                    minlength: "Password must be at least 4 character !!!"
+                },
+                fullname: {
+                    required: "Fullname mustn't be blank, please.",
+                    minlength: "Fullname must be at least 3 character !!!"
+                },
+                email: {
+                    required: "Email mustn't be blank, please.",
+                    email: "Invalid Email!!!"
+                }
+            }
+
+        })
+    })
+</script>
+</html>
